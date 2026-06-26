@@ -15,7 +15,8 @@ class SparepartController extends Controller
     $query = Product::with('category');
 
     if ($request->search) {
-        $query->where('kode_produk', 'like', '%' . $request->search . '%');
+        $query->where('kode_produk', 'like', '%' . $request->search . '%')
+               ->orWhere('nama_produk', 'like', '%' . $request->search . '%');
     }
 
     if ($request->status == 'habis') {
