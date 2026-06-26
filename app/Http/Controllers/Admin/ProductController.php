@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -118,8 +119,22 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
+        // Cek apakah produk ini pernah masuk ke transaksi
+        $isUsedInTransaction = DB::table('transaction_details')
+            ->where('product_id', $product->id)
+            ->exists();
+
+        if ($isUsedInTransaction) {
+            // Jika sudah pernah terjual, jangan hapus — nonaktifkan saja (soft approach)
+            // agar histori transaksi tetap valid dan tidak rusak.
+            return back()->with(
+                'error',
+                'Produk "' . $product->nama_produk . '" tidak dapat dihapus karena sudah pernah ada dalam riwayat transaksi. Kosongkan stok jika ingin menonaktifkan produk ini.'
+            );
+        }
+
         $product->delete();
 
-        return back();
+        return back()->with('success', 'Produk "' . $product->nama_produk . '" berhasil dihapus.');
     }
 }

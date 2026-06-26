@@ -103,6 +103,8 @@ class TransactionController extends Controller
                     'updated_at'  => now(),
                 ]);
 
+            // BUG FIX: Hapus `return` di dalam foreach agar semua produk di keranjang
+            // diproses (insert transaction_detail + decrement stok), bukan hanya produk pertama.
             foreach ($cart as $item) {
                 $product = Product::find($item['id']);
 
@@ -117,29 +119,20 @@ class TransactionController extends Controller
                         'updated_at'     => now(),
                     ]);
 
-                // Kurangi stok di database
+                // Kurangi stok semua produk di keranjang
                 $product->decrement('stok', $item['qty']);
-
-                return back()->with('success', 'Transaksi berhasil disimpan! No Nota: ' . $no_nota);
             }
+            // Akhir foreach — tidak ada return di dalam loop
         }); // Batas akhir DB::transaction
 
-        // ========================================================
-        // PROSES PEMBERSIHAN KERANJANG (DI SINI KUNCI PERBAIKANNYA)
-        // ========================================================
+        // Bersihkan keranjang setelah transaksi berhasil
         session()->forget('cart');
 
-        // Menggunakan back() jauh lebih aman untuk menghindari putaran redirect (loop)
         return back()->with(
             'success',
             'Transaksi berhasil disimpan. No Nota: ' . $no_nota .
                 ' | Kembalian: Rp ' . number_format($kembalian, 0, ',', '.')
         );
-
-        if ($request->bayar < $total_harga) {
-            // Gunakan with('error', '...') untuk mengirim pesan kesalahan
-            return back()->with('error', 'Uang pembayaran kurang! Total: Rp ' . number_format($total_harga, 0, ',', '.'));
-        }
     }
 
     public function addToCart(Request $request)
