@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\TransactionController as AdminTransactionController;
 use App\Http\Controllers\Kasir\TransactionController;
 use App\Http\Controllers\Admin\SparepartController;
+use App\Http\Controllers\Admin\UserController;
 
 // ==========================================
 // RUTE AUTHENTICATION
@@ -29,6 +30,7 @@ Route::middleware(['role:admin'])
     ->group(function () {
 
         Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
+        Route::resource('users', UserController::class);
         Route::resource('categories', CategoryController::class);
         Route::resource('products', ProductController::class);
         Route::resource('spareparts', SparepartController::class);

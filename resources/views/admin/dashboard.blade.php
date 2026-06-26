@@ -36,6 +36,10 @@
                     <i data-lucide="layout-dashboard" class="w-4 h-4 stroke-[2.5]"></i>
                     Dashboard
                 </a>
+                <a href="{{ route('admin.users.index') }}" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:bg-slate-800/60 hover:text-white rounded-xl text-sm font-medium transition group">
+                    <i data-lucide="users" class="w-4 h-4 text-slate-500 group-hover:text-amber-500 transition"></i>
+                    Manajemen User
+                </a>
                 <div class="space-y-1">
                     <button onclick="toggleDropdown('menu-master', 'icon-master')" class="w-full flex items-center justify-between px-3 py-2.5 text-slate-400 hover:bg-slate-800/60 hover:text-white rounded-xl text-sm font-medium transition cursor-pointer group">
                         <div class="flex items-center gap-3">
