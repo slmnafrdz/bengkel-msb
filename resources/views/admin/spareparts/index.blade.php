@@ -25,7 +25,7 @@
 
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
             <div class="flex items-center gap-3">
-                <a href="{{ url('/admin/dashboard') }}" class="p-2.5 bg-[#111827] hover:bg-[#1e293b] border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-white rounded-xl transition group shadow-md" title="Kembali ke Dashboard">
+                <a href="{{ route('admin.dashboard') }}" class="p-2.5 bg-[#111827] hover:bg-[#1e293b] border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-white rounded-xl transition group shadow-md" title="Kembali ke Dashboard">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 transform group-hover:-translate-x-0.5 transition-transform">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                     </svg>

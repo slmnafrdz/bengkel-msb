@@ -32,7 +32,7 @@
                 </div>
             </div>
             <nav class="space-y-2">
-                <a href="/admin/dashboard" class="flex items-center gap-3 px-3 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-black font-semibold rounded-xl text-sm shadow-lg shadow-amber-500/10 transition duration-200">
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-black font-semibold rounded-xl text-sm shadow-lg shadow-amber-500/10 transition duration-200">
                     <i data-lucide="layout-dashboard" class="w-4 h-4 stroke-[2.5]"></i>
                     Dashboard
                 </a>
@@ -45,13 +45,13 @@
                         <i id="icon-master" data-lucide="chevron-down" class="w-4 h-4 text-slate-500 transition-transform duration-200"></i>
                     </button>
                     <div id="menu-master" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-[#0f172a]/40 rounded-xl pl-4 space-y-1">
-                        <a href="/admin/products" class="flex items-center gap-2 px-3 py-2 text-xs text-slate-400 hover:text-white transition rounded-lg group">
+                        <a href="{{ route('admin.products.index') }}" class="flex items-center gap-2 px-3 py-2 text-xs text-slate-400 hover:text-white transition rounded-lg group">
                             <i data-lucide="box" class="w-3.5 h-3.5 text-slate-600 group-hover:text-amber-500"></i>Produk
                         </a>
-                        <a href="/admin/categories" class="flex items-center gap-2 px-3 py-2 text-xs text-slate-400 hover:text-white transition rounded-lg group">
+                        <a href="{{ route('admin.categories.index') }}" class="flex items-center gap-2 px-3 py-2 text-xs text-slate-400 hover:text-white transition rounded-lg group">
                             <i data-lucide="tag" class="w-3.5 h-3.5 text-slate-600 group-hover:text-amber-500"></i>Kategori
                         </a>
-                        <a href="/admin/spareparts" class="flex items-center gap-2 px-3 py-2 text-xs text-slate-400 hover:text-white transition rounded-lg group">
+                        <a href="{{ route('admin.spareparts.index') }}" class="flex items-center gap-2 px-3 py-2 text-xs text-slate-400 hover:text-white transition rounded-lg group">
                             <i data-lucide="settings" class="w-3.5 h-3.5 text-slate-600 group-hover:text-amber-500"></i>Sparepart
                         </a>
                     </div>
@@ -65,14 +65,8 @@
                         <i id="icon-laporan" data-lucide="chevron-down" class="w-4 h-4 text-slate-500 transition-transform duration-200"></i>
                     </button>
                     <div id="menu-laporan" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-[#0f172a]/40 rounded-xl pl-4 space-y-1">
-                        <a href="/admin/laporan-transaksi" class="flex items-center gap-2 px-3 py-2 text-xs text-slate-400 hover:text-white transition rounded-lg group">
-                            <i data-lucide="file-text" class="w-3.5 h-3.5 text-slate-600 group-hover:text-amber-500"></i>Laporan Transaksi
-                        </a>
-                        <a href="/admin/struk-penjualan" class="flex items-center gap-2 px-3 py-2 text-xs text-slate-400 hover:text-white transition rounded-lg group">
-                            <i data-lucide="printer" class="w-3.5 h-3.5 text-slate-600 group-hover:text-amber-500"></i>Struk Penjualan
-                        </a>
-                        <a href="/admin/rekap-pendapatan" class="flex items-center gap-2 px-3 py-2 text-xs text-slate-400 hover:text-white transition rounded-lg group">
-                            <i data-lucide="trending-up" class="w-3.5 h-3.5 text-slate-600 group-hover:text-amber-500"></i>Rekap Pendapatan
+                        <a href="{{ route('admin.transaksi.index') }}" class="flex items-center gap-2 px-3 py-2 text-xs text-slate-400 hover:text-white transition rounded-lg group">
+                            <i data-lucide="file-text" class="w-3.5 h-3.5 text-slate-600 group-hover:text-amber-500"></i>Riwayat Transaksi
                         </a>
                     </div>
                 </div>
@@ -209,7 +203,7 @@
                         <span class="w-1 h-4 bg-amber-500 rounded-full"></span>
                         <h3 class="font-bold text-white text-sm tracking-wide">Live Transaksi Terakhir</h3>
                     </div>
-                    <a href="/riwayat-transaksi" class="text-[11px] font-bold text-slate-400 border border-slate-700 hover:bg-slate-800 rounded-xl px-3 py-1.5 uppercase transition">Lihat Semua</a>
+                    <a href="{{ route('admin.transaksi.index') }}" class="text-[11px] font-bold text-slate-400 border border-slate-700 hover:bg-slate-800 rounded-xl px-3 py-1.5 uppercase transition">Lihat Semua</a>
                 </div>
                 <div class="overflow-x-auto flex-1">
                     @if($lastTransactions->count())
@@ -252,7 +246,7 @@
                         <span class="w-1.5 h-1.5 bg-red-500 rounded-full animate-ping"></span>
                         <h3 class="font-bold text-white text-sm tracking-wide">Peringatan Batas Stok Sparepart</h3>
                     </div>
-                    <a href="/admin/spareparts" class="text-[11px] font-bold text-slate-400 border border-slate-700 hover:bg-slate-800 rounded-xl px-3 py-1.5 uppercase transition">Lihat Semua</a>
+                    <a href="{{ route('admin.spareparts.index') }}" class="text-[11px] font-bold text-slate-400 border border-slate-700 hover:bg-slate-800 rounded-xl px-3 py-1.5 uppercase transition">Lihat Semua</a>
                 </div>
                 <div class="flex-1">
                     @if($stokMenipis->count())

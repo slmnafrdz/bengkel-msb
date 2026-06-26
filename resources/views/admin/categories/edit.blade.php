@@ -34,14 +34,14 @@
                 <p class="text-xs text-slate-400">Perbarui informasi klasifikasi kelompok sparepart untuk kode <span class="text-amber-400 font-mono font-bold">{{ $category->kode_kategori }}</span>.</p>
             </div>
 
-            <a href="{{ route('categories.index') }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl border border-slate-700/80 transition cursor-pointer relative z-10">
+            <a href="{{ route('admin.categories.index') }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl border border-slate-700/80 transition cursor-pointer relative z-10">
                 <i data-lucide="arrow-left" class="w-4 h-4"></i>
                 Batal
             </a>
         </div>
 
         <div class="bg-[#111827] border border-slate-800 rounded-2xl shadow-xl p-6 md:p-8">
-            <form action="{{ route('categories.update', $category->id) }}" method="POST" class="space-y-5">
+            <form action="{{ route('admin.categories.update', $category->id) }}" method="POST" class="space-y-5">
                 @csrf
                 @method('PUT')
 

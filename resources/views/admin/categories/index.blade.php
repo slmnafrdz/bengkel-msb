@@ -35,12 +35,12 @@
 
             <div class="flex flex-wrap items-center gap-3 relative z-10">
 
-                <a href="/admin/dashboard" class="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl border border-slate-700/80 transition cursor-pointer">
+                <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl border border-slate-700/80 transition cursor-pointer">
                     <i data-lucide="arrow-left" class="w-4 h-4"></i>
                     Kembali
                 </a>
 
-                <a href="{{ route('categories.create') }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-black font-semibold rounded-xl text-xs shadow-lg shadow-amber-500/10 hover:shadow-amber-500/30 hover:scale-[1.02] transition duration-200 self-start md:self-center cursor-pointer">
+                <a href="{{ route('admin.categories.create') }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-black font-semibold rounded-xl text-xs shadow-lg shadow-amber-500/10 hover:shadow-amber-500/30 hover:scale-[1.02] transition duration-200 self-start md:self-center cursor-pointer">
                     <i data-lucide="plus-circle" class="w-4 h-4 stroke-[2.5]"></i>
                     Tambah Kategori
                 </a>
@@ -66,7 +66,7 @@
                     Filter Data
                 </button>
                 @if(request('search'))
-                <a href="{{ route('categories.index') }}" class="px-4 py-2.5 bg-red-950/20 hover:bg-red-950/40 text-red-400 text-xs font-semibold rounded-xl border border-red-900/30 transition flex items-center justify-center">
+                <a href="{{ route('admin.categories.index') }}" class="px-4 py-2.5 bg-red-950/20 hover:bg-red-950/40 text-red-400 text-xs font-semibold rounded-xl border border-red-900/30 transition flex items-center justify-center">
                     Reset
                 </a>
                 @endif
@@ -95,11 +95,11 @@
                             <td class="py-3.5 px-4 text-white max-w-xs truncate">{{ $item->deskripsi ?? '-' }}</td>
                             <td class="py-3.5 px-5">
                                 <div class="flex items-center justify-center gap-2">
-                                    <a href="{{ route('categories.edit', $item->id) }}" class="p-2 bg-slate-800/60 hover:bg-amber-500 hover:text-black border border-slate-700/60 hover:border-amber-400 text-slate-300 rounded-xl transition shadow-sm cursor-pointer" title="Edit Kategori">
+                                    <a href="{{ route('admin.categories.edit', $item->id) }}" class="p-2 bg-slate-800/60 hover:bg-amber-500 hover:text-black border border-slate-700/60 hover:border-amber-400 text-slate-300 rounded-xl transition shadow-sm cursor-pointer" title="Edit Kategori">
                                         <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
                                     </a>
 
-                                    <form action="{{ route('categories.destroy', $item->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kategori ini?')">
+                                    <form action="{{ route('admin.categories.destroy', $item->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kategori ini?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="p-2 bg-slate-800/60 hover:bg-red-500/20 hover:text-red-400 border border-slate-700/60 hover:border-red-500/30 text-slate-400 rounded-xl transition shadow-sm cursor-pointer" title="Hapus Kategori">

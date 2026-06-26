@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\TransactionController as AdminTransactionController;
 use App\Http\Controllers\Kasir\TransactionController;
 use App\Http\Controllers\Admin\SparepartController;
 
@@ -24,12 +25,19 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 // ==========================================
 Route::middleware(['role:admin'])
     ->prefix('admin')
+    ->name('admin.')
     ->group(function () {
 
-        Route::get('/dashboard', [DashboardController::class, 'admin']);
+        Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
         Route::resource('categories', CategoryController::class);
         Route::resource('products', ProductController::class);
         Route::resource('spareparts', SparepartController::class);
+
+        // Riwayat Transaksi (Admin)
+        Route::get('/riwayat-transaksi', [AdminTransactionController::class, 'index'])
+            ->name('transaksi.index');
+        Route::get('/riwayat-transaksi/{id}', [AdminTransactionController::class, 'show'])
+            ->name('transaksi.show');
     });
 
 // ==========================================
@@ -37,19 +45,20 @@ Route::middleware(['role:admin'])
 // ==========================================
 Route::middleware(['role:kasir'])->group(function () {
 
-    Route::get('/kasir/dashboard', [DashboardController::class, 'kasir']);
-    
-    // Rute Kasir Utama & Proses Checkout (POST)
+    Route::get('/kasir/dashboard', [DashboardController::class, 'kasir'])->name('kasir.dashboard');
+
+    // Rute Kasir Utama & Proses Checkout
     Route::get('/transaksi', [TransactionController::class, 'index'])->name('transaksi.index');
     Route::post('/transaksi', [TransactionController::class, 'store'])->name('transaksi.store');
 
-    // Pengelolaan Sesi Keranjang Belanja (Wajib POST & DELETE/POST agar tidak merusak form lain)
+    // Keranjang Belanja
     Route::post('/cart/add', [TransactionController::class, 'addToCart'])->name('cart.add');
     Route::post('/cart/remove', [TransactionController::class, 'removeFromCart'])->name('cart.remove');
 
     // Riwayat Transaksi Kasir
     Route::get('/riwayat-transaksi', [TransactionController::class, 'history'])->name('transaksi.history');
     Route::get('/riwayat-transaksi/{id}', [TransactionController::class, 'show'])->name('transaksi.show');
+
     Route::get('/kasir/spareparts', [SparepartController::class, 'index'])->name('kasir.spareparts.index');
 
     // Detail Dashboard Kasir
