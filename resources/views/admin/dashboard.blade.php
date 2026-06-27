@@ -66,11 +66,14 @@
                             <i data-lucide="folder-open" class="w-4 h-4 text-slate-500 group-hover:text-amber-500 transition"></i>
                             <span>Laporan</span>
                         </div>
-                        <i id="icon-laporan" data-lucide="chevron-down" class="w-4 h-4 text-slate-500 transition-transform duration-200"></i>
+                        <i id="icon-laporan" data-lucide="chevron-down" class="w-4 h-4 text-slate-500 transition-transform duration-200" style="transform: rotate(180deg);"></i>
                     </button>
-                    <div id="menu-laporan" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-[#0f172a]/40 rounded-xl pl-4 space-y-1">
+                    <div id="menu-laporan" class="overflow-hidden transition-all duration-300 ease-in-out bg-[#0f172a]/40 rounded-xl pl-4 space-y-1" style="max-height: 200px;">
                         <a href="{{ route('admin.transaksi.index') }}" class="flex items-center gap-2 px-3 py-2 text-xs text-slate-400 hover:text-white transition rounded-lg group">
                             <i data-lucide="file-text" class="w-3.5 h-3.5 text-slate-600 group-hover:text-amber-500"></i>Riwayat Transaksi
+                        </a>
+                        <a href="{{ route('admin.transaksi.laporan') }}" class="flex items-center gap-2 px-3 py-2 text-xs text-slate-400 hover:text-white transition rounded-lg group">
+                            <i data-lucide="bar-chart-2" class="w-3.5 h-3.5 text-slate-600 group-hover:text-amber-500"></i>Laporan Transaksi
                         </a>
                     </div>
                 </div>
@@ -327,7 +330,6 @@
 
     document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('menu-master').style.maxHeight = "0px";
-        document.getElementById('menu-laporan').style.maxHeight = "0px";
 
         // JAM HEADER
         function jalankanJam() {

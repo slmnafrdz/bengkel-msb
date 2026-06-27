@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -85,7 +86,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         // Jangan hapus akun yang sedang login
-        if ($user->id === auth()->id()) {
+        if ($user->id === Auth::id()) {
             return back()->with('error', 'Tidak dapat menghapus akun yang sedang aktif.');
         }
 

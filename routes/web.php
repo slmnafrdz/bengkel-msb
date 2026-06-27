@@ -40,6 +40,10 @@ Route::middleware(['role:admin'])
             ->name('transaksi.index');
         Route::get('/riwayat-transaksi/{id}', [AdminTransactionController::class, 'show'])
             ->name('transaksi.show');
+
+        // Laporan Transaksi (Admin)
+        Route::get('/laporan-transaksi', [AdminTransactionController::class, 'laporan'])
+            ->name('transaksi.laporan');
     });
 
 // ==========================================

@@ -67,6 +67,9 @@
                         <a href="{{ route('admin.transaksi.index') }}" class="flex items-center gap-2 px-3 py-2 text-xs text-slate-400 hover:text-white transition rounded-lg group">
                             <i data-lucide="file-text" class="w-3.5 h-3.5 text-slate-600 group-hover:text-amber-500"></i>Riwayat Transaksi
                         </a>
+                        <a href="{{ route('admin.transaksi.laporan') }}" class="flex items-center gap-2 px-3 py-2 text-xs text-slate-400 hover:text-white transition rounded-lg group">
+                            <i data-lucide="bar-chart-2" class="w-3.5 h-3.5 text-slate-600 group-hover:text-amber-500"></i>Laporan Transaksi
+                        </a>
                     </div>
                 </div>
             </nav>
