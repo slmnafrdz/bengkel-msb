@@ -69,22 +69,35 @@
 
         <main class="flex-1 p-6 overflow-y-auto">
 
-            <header class="flex items-center justify-between mb-5 bg-[#111827]/40 border border-slate-800/60 rounded-2xl px-5 py-3 backdrop-blur-md">
-                <div></div>
-                <div class="flex items-center gap-3">
-                    <div class="flex items-center gap-2 text-xs text-slate-300 bg-[#161f30] border border-slate-700/80 px-3 py-1.5 rounded-xl font-medium">
-                        <i data-lucide="calendar" class="w-3.5 h-3.5 text-amber-500"></i>
-                        <span>{{ $tanggalSekarang }}</span>
+            {{-- HEADER --}}
+            <div class="flex justify-between items-center bg-[#111827] border border-slate-800 px-6 py-4 rounded-2xl shadow-md w-full mb-6">
+                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Overview System</span>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2 text-slate-300 font-medium text-xs bg-[#0f172a] border border-slate-800 px-4 py-2 rounded-xl shadow-inner select-none">
+                        <i data-lucide="calendar" class="w-4 h-4 text-amber-500"></i>
+                        <span id="live-clock" class="tracking-wide">Memuat waktu...</span>
                     </div>
-                    <div class="flex items-center gap-2 border-l border-slate-800 pl-3">
-                        <div class="w-7 h-7 bg-amber-500 rounded-full flex items-center justify-center text-slate-900 shadow-md shadow-amber-500/10">
-                            <i data-lucide="user" class="w-3.5 h-3.5 stroke-[2.5]"></i>
+                    <div class="w-px h-6 bg-slate-800"></div>
+                    <div class="relative" id="admin-profile-container">
+                        <button id="btn-dropdown-admin" class="flex items-center gap-3 text-xs font-semibold text-slate-200 hover:text-white transition cursor-pointer group focus:outline-none select-none">
+                            <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-black font-bold shadow-md">
+                                <i data-lucide="user" class="w-4 h-4 stroke-[2.5]"></i>
+                            </div>
+                            <span class="hidden sm:inline-block">Kasir Bengkel</span>
+                            <i data-lucide="chevron-down" id="icon-chevron" class="w-4 h-4 text-slate-500 transition duration-200"></i>
+                        </button>
+                        <div id="dropdown-admin-menu" class="hidden absolute right-0 mt-3 w-48 bg-[#111827] border border-slate-800 rounded-xl shadow-xl py-2 z-50">
+                            <div class="px-4 py-2 border-b border-slate-800/60 mb-1">
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Log Masuk Sebagai</p>
+                                <p class="text-xs font-semibold text-amber-400 truncate">{{ Auth::user()->email ?? 'kasir@bengkel.com' }}</p>
+                            </div>
+                            <a href="/logout" class="flex items-center gap-2 px-4 py-2.5 text-xs text-rose-400 hover:bg-rose-500/10 transition font-bold">
+                                <i data-lucide="log-out" class="w-3.5 h-3.5"></i>Logout
+                            </a>
                         </div>
-                        <span class="text-xs font-semibold text-white">Kasir Utama</span>
-                        <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-500"></i>
                     </div>
                 </div>
-            </header>
+            </div>
 
             <div class="bg-gradient-to-br from-[#111827] to-[#1e293b]/50 border border-slate-800/60 rounded-2xl p-5 mb-5 relative flex justify-between items-center overflow-hidden">
                 <div class="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-20"></div>
