@@ -83,7 +83,7 @@
                             <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-black font-bold shadow-md">
                                 <i data-lucide="user" class="w-4 h-4 stroke-[2.5]"></i>
                             </div>
-                            <span class="hidden sm:inline-block">Kasir Bengkel</span>
+                            <span class="hidden sm:inline-block">{{ Auth::user()->name ?? 'Kasir' }}</span>
                             <i data-lucide="chevron-down" id="icon-chevron" class="w-4 h-4 text-slate-500 transition duration-200"></i>
                         </button>
                         <div id="dropdown-admin-menu" class="hidden absolute right-0 mt-3 w-48 bg-[#111827] border border-slate-800 rounded-xl shadow-xl py-2 z-50">
@@ -255,6 +255,41 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             lucide.createIcons();
+
+            // ── JAM BERJALAN (sama seperti admin) ──────────────────────────
+            function jalankanJam() {
+                const now  = new Date();
+                const tgl  = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+                const jam  = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                const el   = document.getElementById('live-clock');
+                if (el) el.textContent = tgl + ' | ' + jam;
+            }
+            jalankanJam();
+            setInterval(jalankanJam, 1000);
+
+            // ── DROPDOWN PROFIL ────────────────────────────────────────────
+            const btn      = document.getElementById('btn-dropdown-admin');
+            const menu     = document.getElementById('dropdown-admin-menu');
+            const chevron  = document.getElementById('icon-chevron');
+
+            if (btn && menu) {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const isHidden = menu.classList.contains('hidden');
+                    menu.classList.toggle('hidden', !isHidden);
+                    if (chevron) chevron.style.transform = isHidden ? 'rotate(180deg)' : '';
+                });
+
+                // Tutup dropdown saat klik di luar
+                document.addEventListener('click', function() {
+                    menu.classList.add('hidden');
+                    if (chevron) chevron.style.transform = '';
+                });
+
+                menu.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            }
         });
     </script>
 </body>
