@@ -44,14 +44,29 @@
             <form action="{{ route('admin.categories.store') }}" method="POST" class="space-y-5">
                 @csrf
 
+                {{-- ── Error Alert ── --}}
+                @if ($errors->any())
+                <div class="flex items-start gap-3 p-4 bg-rose-500/10 border border-rose-500/30 rounded-xl text-xs text-rose-400">
+                    <i data-lucide="alert-circle" class="w-4 h-4 shrink-0 mt-0.5"></i>
+                    <ul class="space-y-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+
                 <div class="space-y-2">
                     <label class="text-xs font-semibold text-slate-300 tracking-wide block">Nama Kategori</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
                             <i data-lucide="layers" class="w-4 h-4"></i>
                         </div>
-                        <input type="text" name="nama_kategori" placeholder="Contoh: Pelumas, Ban, Fast Moving" required
-                            class="w-full text-xs bg-[#0f172a] text-slate-200 pl-9 pr-4 py-3 border border-slate-700/60 rounded-xl focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/30 transition placeholder:text-slate-600">
+                        <input type="text" name="nama_kategori" value="{{ old('nama_kategori') }}" placeholder="Contoh: Pelumas, Ban, Fast Moving" required
+                            class="w-full text-xs bg-[#0f172a] text-slate-200 pl-9 pr-4 py-3 border border-slate-700/60 rounded-xl focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/30 transition placeholder:text-slate-600 {{ $errors->has('nama_kategori') ? 'border-rose-500 ring-1 ring-rose-500/30' : '' }}">
+                        </div>
+                        @error('nama_kategori')<p class="text-[11px] text-rose-400 mt-1 flex items-center gap-1"><i data-lucide="alert-circle" class="w-3 h-3"></i>{{ $message }}</p>@enderror
+                        <!-- end -->
                     </div>
                 </div>
 
@@ -62,7 +77,7 @@
                             <i data-lucide="file-text" class="w-4 h-4"></i>
                         </div>
                         <textarea name="deskripsi" rows="4" placeholder="Masukkan penjelasan singkat mengenai kategori ini..."
-                            class="w-full text-xs bg-[#0f172a] text-slate-200 pl-9 pr-4 py-3 border border-slate-700/60 rounded-xl focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/30 transition placeholder:text-slate-600 resize-none"></textarea>
+                            class="w-full text-xs bg-[#0f172a] text-slate-200 pl-9 pr-4 py-3 border border-slate-700/60 rounded-xl focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/30 transition placeholder:text-slate-600 resize-none">{{ old('deskripsi') }}</textarea>
                     </div>
                 </div>
 

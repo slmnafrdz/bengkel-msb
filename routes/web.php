@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\TransactionController as AdminTransactionController;
 use App\Http\Controllers\Kasir\TransactionController;
+use App\Http\Controllers\Kasir\ReturnController;      // ← ReturnController (bukan ReturController)
 use App\Http\Controllers\Admin\SparepartController;
 use App\Http\Controllers\Admin\UserController;
 
@@ -71,4 +72,17 @@ Route::middleware(['role:kasir'])->group(function () {
     Route::get('/kasir/detail-trx-hari-ini', [TransactionController::class, 'trxHariIni'])->name('kasir.detail.trx_hari_ini');
     Route::get('/kasir/detail-omset-hari-ini', [TransactionController::class, 'omsetHariIni'])->name('kasir.detail.omset_hari_ini');
     Route::get('/kasir/detail-produk-terjual', [TransactionController::class, 'produkTerjual'])->name('kasir.detail.produk_terjual');
+
+    // ==========================================
+    // RETURN / RETUR BARANG
+    // ==========================================
+    Route::get('/retur',              [ReturnController::class, 'index'])->name('kasir.return.index');
+    Route::get('/retur/form',         [ReturnController::class, 'form'])->name('kasir.return.form');
+    Route::post('/retur',             [ReturnController::class, 'store'])->name('kasir.return.store');
+    Route::get('/retur/riwayat',      [ReturnController::class, 'history'])->name('kasir.return.history');
+    Route::get('/retur/riwayat/{id}', [ReturnController::class, 'show'])->name('kasir.return.show');
+
+    // Alias kompatibilitas link lama
+    Route::get('/retur',               [ReturnController::class, 'index'])->name('retur.create');
+    Route::get('/retur/create',        [ReturnController::class, 'index'])->name('retur.index');
 });

@@ -93,7 +93,7 @@
             {{-- HEADER --}}
             <div class="flex items-center justify-between mb-6">
                 <div>
-                    <h1 class="text-xl font-extrabold text-white">Laporan Transaksi</h1>
+                    <h1 class="text-xl font-extrabold text-white">Riwayat Transaksi</h1>
                     <p class="text-xs text-slate-400 mt-0.5">Seluruh riwayat penjualan sparepart Bengkel MSB.</p>
                 </div>
                 <div class="flex items-center gap-2 text-xs text-slate-500 bg-slate-800/50 border border-slate-700/50 rounded-xl px-3 py-2">

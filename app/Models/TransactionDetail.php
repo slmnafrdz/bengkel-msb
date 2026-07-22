@@ -24,4 +24,25 @@ class TransactionDetail extends Model
     {
         return $this->belongsTo(Transaction::class);
     }
+
+    public function returDetails()
+    {
+        return $this->hasMany(ReturDetail::class, 'transaction_detail_id');
+    }
+
+    /**
+     * Total qty item ini yang sudah pernah diretur (dikembalikan) sebelumnya.
+     */
+    public function getQtySudahDireturAttribute()
+    {
+        return (int) $this->returDetails()->where('tipe', 'dikembalikan')->sum('qty');
+    }
+
+    /**
+     * Sisa qty yang masih boleh diretur untuk item ini.
+     */
+    public function getSisaBisaDireturAttribute()
+    {
+        return max(0, $this->qty - $this->qty_sudah_diretur);
+    }
 }

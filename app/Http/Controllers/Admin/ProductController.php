@@ -15,126 +15,108 @@ class ProductController extends Controller
         $query = Product::with('category');
 
         if ($request->search) {
-
-            $query->where(
-                'kode_produk',
-                'like',
-                '%' . $request->search . '%'
-            );
+            $query->where('kode_produk', 'like', '%' . $request->search . '%')
+                  ->orWhere('nama_produk', 'like', '%' . $request->search . '%');
         }
 
-        $products = $query
-            ->orderBy('kode_produk', 'asc')
-            ->get();
+        $products = $query->orderBy('kode_produk', 'asc')->get();
 
-        return view(
-            'admin.products.index',
-            compact('products')
-        );
+        return view('admin.products.index', compact('products'));
     }
 
     public function create()
     {
         $categories = Category::all();
-
-        return view(
-            'admin.products.create',
-            compact('categories')
-        );
+        return view('admin.products.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'nama_produk' => 'required',
+            'nama_produk' => 'required|unique:products,nama_produk',
             'category_id' => 'required|exists:categories,id',
-            'harga_beli' => 'required|numeric',
-            'harga_jual' => 'required|numeric',
-            'stok' => 'required|numeric',
+            'harga_beli'  => 'required|numeric|min:0',
+            'harga_jual'  => 'required|numeric|min:0',
+            'stok'        => 'required|numeric|min:0',
+            'minimum_stok'=> 'nullable|numeric|min:0',
+        ], [
+            'nama_produk.required' => 'Nama produk wajib diisi.',
+            'nama_produk.unique'   => 'Nama produk "' . $request->nama_produk . '" sudah terdaftar. Gunakan nama yang berbeda.',
+            'category_id.required' => 'Kategori wajib dipilih.',
+            'harga_beli.numeric'   => 'Harga beli harus berupa angka.',
+            'harga_jual.numeric'   => 'Harga jual harus berupa angka.',
+            'stok.numeric'         => 'Stok harus berupa angka.',
         ]);
 
-        // Ambil produk terakhir
         $lastProduct = Product::latest()->first();
-
-        if ($lastProduct) {
-
-            $lastNumber = (int) substr(
-                $lastProduct->kode_produk,
-                3
-            );
-
-            $newNumber = $lastNumber + 1;
-        } else {
-
-            $newNumber = 1;
-        }
-
-        $kodeProduk = 'SP-' . str_pad(
-            $newNumber,
-            4,
-            '0',
-            STR_PAD_LEFT
-        );
+        $newNumber   = $lastProduct ? ((int) substr($lastProduct->kode_produk, 3)) + 1 : 1;
+        $kodeProduk  = 'SP-' . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
 
         Product::create([
-            'kode_produk' => $kodeProduk,
-            'nama_produk' => $request->nama_produk,
-            'category_id' => $request->category_id,
-            'stok' => $request->stok,
-            'minimum_stok' => $request->minimum_stok,
-            'harga_beli' => $request->harga_beli,
-            'harga_jual' => $request->harga_jual,
+            'kode_produk'  => $kodeProduk,
+            'nama_produk'  => $request->nama_produk,
+            'category_id'  => $request->category_id,
+            'stok'         => $request->stok,
+            'minimum_stok' => $request->minimum_stok ?? 5,
+            'harga_beli'   => $request->harga_beli,
+            'harga_jual'   => $request->harga_jual,
         ]);
 
         return redirect()
-            ->route('products.index')
-            ->with(
-                'success',
-                'Produk berhasil ditambahkan'
-            );
+            ->route('admin.products.index')
+            ->with('success', 'Produk berhasil ditambahkan.');
     }
 
     public function edit(Product $product)
     {
         $categories = Category::all();
-
-        return view(
-            'admin.products.edit',
-            compact(
-                'product',
-                'categories'
-            )
-        );
+        return view('admin.products.edit', compact('product', 'categories'));
     }
 
-    public function update(
-        Request $request,
-        Product $product
-    ) {
-        $product->update($request->all());
+    public function update(Request $request, Product $product)
+    {
+        $request->validate([
+            // ignore produk yang sedang diedit (pakai ,id)
+            'nama_produk' => 'required|unique:products,nama_produk,' . $product->id,
+            'category_id' => 'required|exists:categories,id',
+            'harga_beli'  => 'required|numeric|min:0',
+            'harga_jual'  => 'required|numeric|min:0',
+            'stok'        => 'required|numeric|min:0',
+            'minimum_stok'=> 'nullable|numeric|min:0',
+        ], [
+            'nama_produk.required' => 'Nama produk wajib diisi.',
+            'nama_produk.unique'   => 'Nama produk "' . $request->nama_produk . '" sudah digunakan produk lain.',
+            'category_id.required' => 'Kategori wajib dipilih.',
+        ]);
+
+        $product->update([
+            'nama_produk'  => $request->nama_produk,
+            'category_id'  => $request->category_id,
+            'stok'         => $request->stok,
+            'minimum_stok' => $request->minimum_stok ?? 5,
+            'harga_beli'   => $request->harga_beli,
+            'harga_jual'   => $request->harga_jual,
+        ]);
 
         return redirect()
-            ->route('products.index');
+            ->route('admin.products.index')
+            ->with('success', 'Produk berhasil diperbarui.');
     }
 
     public function destroy(Product $product)
     {
-        // Cek apakah produk ini pernah masuk ke transaksi
         $isUsedInTransaction = DB::table('transaction_details')
             ->where('product_id', $product->id)
             ->exists();
 
         if ($isUsedInTransaction) {
-            // Jika sudah pernah terjual, jangan hapus — nonaktifkan saja (soft approach)
-            // agar histori transaksi tetap valid dan tidak rusak.
             return back()->with(
                 'error',
-                'Produk "' . $product->nama_produk . '" tidak dapat dihapus karena sudah pernah ada dalam riwayat transaksi. Kosongkan stok jika ingin menonaktifkan produk ini.'
+                'Produk "' . $product->nama_produk . '" tidak dapat dihapus karena sudah pernah ada dalam riwayat transaksi.'
             );
         }
 
         $product->delete();
-
         return back()->with('success', 'Produk "' . $product->nama_produk . '" berhasil dihapus.');
     }
 }

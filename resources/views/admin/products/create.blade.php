@@ -44,6 +44,18 @@
             <form action="{{ route('admin.products.store') }}" method="POST" class="space-y-5">
                 @csrf
 
+                {{-- ── Error Alert ── --}}
+                @if ($errors->any())
+                <div class="flex items-start gap-3 p-4 bg-rose-500/10 border border-rose-500/30 rounded-xl text-xs text-rose-400">
+                    <i data-lucide="alert-circle" class="w-4 h-4 shrink-0 mt-0.5"></i>
+                    <ul class="space-y-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div class="space-y-2">
                         <label class="text-xs font-semibold text-slate-300 tracking-wide block">Nama Produk</label>
@@ -51,9 +63,10 @@
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
                                 <i data-lucide="package" class="w-4 h-4"></i>
                             </div>
-                            <input type="text" name="nama_produk" placeholder="Contoh: Oli Top 1 Action Matic" required
-                                class="w-full text-xs bg-[#0f172a] text-slate-200 pl-9 pr-4 py-3 border border-slate-700/60 rounded-xl focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/30 transition placeholder:text-slate-600">
+                            <input type="text" name="nama_produk" value="{{ old('nama_produk') }}" placeholder="Contoh: Oli Top 1 Action Matic" required
+                                class="w-full text-xs bg-[#0f172a] text-slate-200 pl-9 pr-4 py-3 border border-slate-700/60 rounded-xl focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/30 transition placeholder:text-slate-600 {{ $errors->has('nama_produk') ? 'border-rose-500 ring-1 ring-rose-500/30' : '' }}">
                         </div>
+                        @error('nama_produk')<p class="text-[11px] text-rose-400 mt-1 flex items-center gap-1"><i data-lucide="alert-circle" class="w-3 h-3"></i>{{ $message }}</p>@enderror
                     </div>
 
                     <div class="space-y-2">
@@ -85,7 +98,7 @@
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
                                 <i data-lucide="boxes" class="w-4 h-4"></i>
                             </div>
-                            <input type="number" name="stok" placeholder="0" min="0" required
+                            <input type="number" name="stok" value="{{ old('stok') }}" placeholder="0" min="0" required
                                 class="w-full text-xs bg-[#0f172a] text-slate-200 pl-9 pr-4 py-3 border border-slate-700/60 rounded-xl focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/30 transition placeholder:text-slate-600">
                         </div>
                     </div>
@@ -96,7 +109,7 @@
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
                                 <i data-lucide="alert-triangle" class="w-4 h-4"></i>
                             </div>
-                            <input type="number" name="minimum_stok" placeholder="Contoh: 3" min="0" required
+                            <input type="number" name="minimum_stok" value="{{ old('minimum_stok') }}" placeholder="Contoh: 3" min="0" required
                                 class="w-full text-xs bg-[#0f172a] text-slate-200 pl-9 pr-4 py-3 border border-slate-700/60 rounded-xl focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/30 transition placeholder:text-slate-600">
                         </div>
                     </div>
@@ -111,7 +124,7 @@
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 font-mono font-bold text-xs">
                                 Rp
                             </div>
-                            <input type="number" name="harga_beli" placeholder="0" min="0" required
+                            <input type="number" name="harga_beli" value="{{ old('harga_beli') }}" placeholder="0" min="0" required
                                 class="w-full text-xs bg-[#0f172a] text-slate-200 pl-9 pr-4 py-3 border border-slate-700/60 rounded-xl focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/30 transition placeholder:text-slate-600 font-mono">
                         </div>
                     </div>
@@ -122,7 +135,7 @@
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-emerald-400 font-mono font-bold text-xs">
                                 Rp
                             </div>
-                            <input type="number" name="harga_jual" placeholder="0" min="0" required
+                            <input type="number" name="harga_jual" value="{{ old('harga_jual') }}" placeholder="0" min="0" required
                                 class="w-full text-xs bg-[#0f172a] text-slate-200 pl-9 pr-4 py-3 border border-slate-700/60 rounded-xl focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/30 transition placeholder:text-slate-600 font-mono font-bold text-emerald-400">
                         </div>
                     </div>

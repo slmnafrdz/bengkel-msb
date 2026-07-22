@@ -26,5 +26,8 @@ class Transaction extends Model
         return $this->belongsTo(User::class);
     }
 
-    
+    public function returs()
+    {
+        return $this->hasMany(Retur::class);
+    }
 }

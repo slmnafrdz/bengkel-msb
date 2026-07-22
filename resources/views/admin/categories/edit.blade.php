@@ -45,6 +45,18 @@
                 @csrf
                 @method('PUT')
 
+                {{-- ── Error Alert ── --}}
+                @if ($errors->any())
+                <div class="flex items-start gap-3 p-4 bg-rose-500/10 border border-rose-500/30 rounded-xl text-xs text-rose-400">
+                    <i data-lucide="alert-circle" class="w-4 h-4 shrink-0 mt-0.5"></i>
+                    <ul class="space-y-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+
                 <div class="space-y-2">
                     <label class="text-xs font-semibold text-slate-400 tracking-wide block">Kode Kategori</label>
                     <div class="relative">
@@ -63,7 +75,10 @@
                             <i data-lucide="layers" class="w-4 h-4"></i>
                         </div>
                         <input type="text" name="nama_kategori" value="{{ old('nama_kategori', $category->nama_kategori) }}" required
-                            class="w-full text-xs bg-[#0f172a] text-slate-200 pl-9 pr-4 py-3 border border-slate-700/60 rounded-xl focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/30 transition">
+                            class="w-full text-xs bg-[#0f172a] text-slate-200 pl-9 pr-4 py-3 border border-slate-700/60 rounded-xl focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/30 transition {{ $errors->has('nama_kategori') ? 'border-rose-500 ring-1 ring-rose-500/30' : '' }}">
+                        </div>
+                        @error('nama_kategori')<p class="text-[11px] text-rose-400 mt-1 flex items-center gap-1"><i data-lucide="alert-circle" class="w-3 h-3"></i>{{ $message }}</p>@enderror
+                        <!-- end -->
                     </div>
                 </div>
 
