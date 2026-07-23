@@ -56,6 +56,11 @@
                         <i data-lucide="history" class="w-4 h-4 text-slate-500"></i>
                         Riwayat Transaksi
                     </a>
+
+                    <a href="/retur" class="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:bg-slate-800/50 hover:text-white rounded-xl text-xs uppercase tracking-wider transition font-semibold">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4 text-slate-500"></i>
+                        Retur Barang
+                    </a>
                 </nav>
             </div>
 

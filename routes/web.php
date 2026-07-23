@@ -7,7 +7,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\TransactionController as AdminTransactionController;
 use App\Http\Controllers\Kasir\TransactionController;
-use App\Http\Controllers\Kasir\ReturnController;      // ← ReturnController (bukan ReturController)
+use App\Http\Controllers\Kasir\ReturController;
 use App\Http\Controllers\Admin\SparepartController;
 use App\Http\Controllers\Admin\UserController;
 
@@ -74,15 +74,12 @@ Route::middleware(['role:kasir'])->group(function () {
     Route::get('/kasir/detail-produk-terjual', [TransactionController::class, 'produkTerjual'])->name('kasir.detail.produk_terjual');
 
     // ==========================================
-    // RETURN / RETUR BARANG
+    // RETUR BARANG (Tukar Barang / Kembali Uang)
     // ==========================================
-    Route::get('/retur',              [ReturnController::class, 'index'])->name('kasir.return.index');
-    Route::get('/retur/form',         [ReturnController::class, 'form'])->name('kasir.return.form');
-    Route::post('/retur',             [ReturnController::class, 'store'])->name('kasir.return.store');
-    Route::get('/retur/riwayat',      [ReturnController::class, 'history'])->name('kasir.return.history');
-    Route::get('/retur/riwayat/{id}', [ReturnController::class, 'show'])->name('kasir.return.show');
-
-    // Alias kompatibilitas link lama
-    Route::get('/retur',               [ReturnController::class, 'index'])->name('retur.create');
-    Route::get('/retur/create',        [ReturnController::class, 'index'])->name('retur.index');
+    Route::get('/retur', [ReturController::class, 'index'])->name('retur.index');
+    Route::post('/retur/cari', [ReturController::class, 'cari'])->name('retur.cari');
+    Route::get('/retur/riwayat', [ReturController::class, 'history'])->name('retur.history');
+    Route::get('/retur/{transaction}/create', [ReturController::class, 'create'])->name('retur.create');
+    Route::post('/retur/{transaction}/store', [ReturController::class, 'store'])->name('retur.store');
+    Route::get('/retur/nota/{noRetur}', [ReturController::class, 'show'])->name('retur.show');
 });

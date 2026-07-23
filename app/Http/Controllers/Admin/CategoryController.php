@@ -13,14 +13,21 @@ class CategoryController extends Controller
         $query = Category::query();
 
         if ($request->search) {
+
             $query->where('kode_kategori', 'like', '%' . $request->search . '%')
-                  ->orWhere('nama_kategori', 'like', '%' . $request->search . '%');
+                ->orWhere('nama_kategori', 'like', '%' . $request->search . '%');
         }
 
-        $categories = $query->orderBy('kode_kategori')->get();
+        $categories = $query
+            ->orderBy('kode_kategori')
+            ->get();
 
-        return view('admin.categories.index', compact('categories'));
+        return view(
+            'admin.categories.index',
+            compact('categories')
+        );
     }
+
 
     public function create()
     {
@@ -30,59 +37,76 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_kategori' => 'required|unique:categories,nama_kategori',
-        ], [
-            'nama_kategori.required' => 'Nama kategori wajib diisi.',
-            'nama_kategori.unique'   => 'Nama kategori "' . $request->nama_kategori . '" sudah terdaftar. Gunakan nama yang berbeda.',
+            'nama_kategori' => 'required'
         ]);
 
         $lastCategory = Category::latest()->first();
-        $newNumber    = $lastCategory ? ((int) substr($lastCategory->kode_kategori, 4)) + 1 : 1;
-        $kodeKategori = 'KAT-' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+
+        if ($lastCategory) {
+
+            $lastNumber = (int) substr(
+                $lastCategory->kode_kategori,
+                4
+            );
+
+            $newNumber = $lastNumber + 1;
+        } else {
+
+            $newNumber = 1;
+        }
+
+        $kodeKategori = 'KAT-' . str_pad(
+            $newNumber,
+            3,
+            '0',
+            STR_PAD_LEFT
+        );
 
         Category::create([
             'kode_kategori' => $kodeKategori,
             'nama_kategori' => $request->nama_kategori,
-            'deskripsi'     => $request->deskripsi,
+            'deskripsi' => $request->deskripsi
         ]);
 
         return redirect()
-            ->route('admin.categories.index')
-            ->with('success', 'Kategori berhasil ditambahkan.');
+            ->route('categories.index')
+            ->with(
+                'success',
+                'Kategori berhasil ditambahkan'
+            );
     }
 
     public function edit(Category $category)
     {
-        return view('admin.categories.edit', compact('category'));
+        return view(
+            'admin.categories.edit',
+            compact('category')
+        );
     }
 
-    public function update(Request $request, Category $category)
-    {
+    public function update(
+        Request $request,
+        Category $category
+    ) {
         $request->validate([
-            'kode_kategori' => 'required|unique:categories,kode_kategori,' . $category->id,
-            // ignore kategori yang sedang diedit
-            'nama_kategori' => 'required|unique:categories,nama_kategori,' . $category->id,
-        ], [
-            'kode_kategori.required' => 'Kode kategori wajib diisi.',
-            'kode_kategori.unique'   => 'Kode kategori sudah digunakan.',
-            'nama_kategori.required' => 'Nama kategori wajib diisi.',
-            'nama_kategori.unique'   => 'Nama kategori "' . $request->nama_kategori . '" sudah digunakan kategori lain.',
+            'kode_kategori' => 'required',
+            'nama_kategori' => 'required'
         ]);
 
         $category->update([
             'kode_kategori' => $request->kode_kategori,
             'nama_kategori' => $request->nama_kategori,
-            'deskripsi'     => $request->deskripsi,
+            'deskripsi' => $request->deskripsi
         ]);
 
         return redirect()
-            ->route('admin.categories.index')
-            ->with('success', 'Kategori berhasil diperbarui.');
+            ->route('categories.index');
     }
 
     public function destroy(Category $category)
     {
         $category->delete();
-        return back()->with('success', 'Kategori berhasil dihapus.');
+
+        return back();
     }
 }

@@ -93,7 +93,7 @@
             {{-- HEADER --}}
             <div class="flex items-center justify-between mb-6">
                 <div>
-                    <h1 class="text-xl font-extrabold text-white">Riwayat Transaksi</h1>
+                    <h1 class="text-xl font-extrabold text-white">Laporan Transaksi</h1>
                     <p class="text-xs text-slate-400 mt-0.5">Seluruh riwayat penjualan sparepart Bengkel MSB.</p>
                 </div>
                 <div class="flex items-center gap-2 text-xs text-slate-500 bg-slate-800/50 border border-slate-700/50 rounded-xl px-3 py-2">
@@ -171,6 +171,7 @@
                             <th class="text-left px-5 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">Tanggal & Jam</th>
                             <th class="text-left px-5 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">Kasir</th>
                             <th class="text-right px-5 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">Total</th>
+                            <th class="text-center px-5 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">Status Retur</th>
                             <th class="text-center px-5 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">Aksi</th>
                         </tr>
                     </thead>
@@ -201,6 +202,16 @@
                                 <span class="font-bold text-white text-sm">Rp {{ number_format($trx->total, 0, ',', '.') }}</span>
                             </td>
                             <td class="px-5 py-4 text-center">
+                                @if($trx->jumlah_retur > 0)
+                                <span class="inline-flex flex-col items-center gap-0.5 px-2.5 py-1 bg-rose-500/10 border border-rose-500/30 text-rose-400 text-[10px] font-bold rounded-lg">
+                                    <span>{{ $trx->jumlah_retur }}x Retur</span>
+                                    <span class="text-rose-300/80">Rp {{ number_format($trx->total_nilai_retur, 0, ',', '.') }}</span>
+                                </span>
+                                @else
+                                <span class="text-slate-600 text-[10px] font-semibold">—</span>
+                                @endif
+                            </td>
+                            <td class="px-5 py-4 text-center">
                                 <a href="{{ route('admin.transaksi.show', $trx->id) }}"
                                     class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500 border border-emerald-500/30 hover:border-emerald-400 text-emerald-400 hover:text-white text-xs font-bold rounded-lg transition">
                                     <i data-lucide="eye" class="w-3 h-3"></i> Detail
@@ -209,7 +220,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="6" class="px-5 py-16 text-center text-slate-500 text-sm">
+                            <td colspan="7" class="px-5 py-16 text-center text-slate-500 text-sm">
                                 <i data-lucide="inbox" class="w-8 h-8 mx-auto mb-2 text-slate-700"></i>
                                 <p>Belum ada transaksi yang tercatat.</p>
                             </td>

@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class ReturnController extends Controller
+class ReturController extends Controller
 {
     /**
      * Halaman pencarian nota untuk memulai proses retur.

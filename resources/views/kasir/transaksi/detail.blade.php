@@ -26,11 +26,18 @@
                 <i data-lucide="arrow-left" class="w-4 h-4"></i>
                 Kembali
             </a>
-            <button onclick="window.print()"
-                class="inline-flex items-center gap-2 px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold rounded-xl transition">
-                <i data-lucide="printer" class="w-4 h-4"></i>
-                Cetak Nota
-            </button>
+            <div class="flex items-center gap-2">
+                <a href="{{ route('retur.create', $transaction->id) }}"
+                    class="inline-flex items-center gap-2 px-4 py-2.5 bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold rounded-xl transition">
+                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                    Ajukan Retur
+                </a>
+                <button onclick="window.print()"
+                    class="inline-flex items-center gap-2 px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold rounded-xl transition">
+                    <i data-lucide="printer" class="w-4 h-4"></i>
+                    Cetak Nota
+                </button>
+            </div>
         </div>
 
         {{-- NOTA --}}
@@ -109,7 +116,7 @@
             {{-- FOOTER NOTA --}}
             <div class="text-center mt-6 text-[10px] text-slate-500 border-t border-slate-800 pt-4">
                 <p>Terima kasih telah berbelanja di Bengkel MSB</p>
-                <p>Barang yang sudah dibeli tidak dapat dikembalikan</p>
+                <p>Barang dapat diretur/ditukar dengan menunjukkan nota ini ke kasir</p>
             </div>
 
         </div>

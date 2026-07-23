@@ -141,6 +141,24 @@
             color: #052e16;
         }
 
+        .btn-retur {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            padding: 6px 14px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            display: inline-block;
+            margin-left: 6px;
+        }
+
+        .btn-retur:hover {
+            background-color: var(--accent-color);
+            color: #1c1917;
+        }
+
         .empty-state {
             text-align: center;
             color: var(--text-muted);
@@ -154,7 +172,10 @@
 <div class="container">
     <div class="header-section">
         <h2>Daftar Transaksi Hari Ini</h2>
-        <a href="/kasir/dashboard" class="btn-back">← Kembali ke Dashboard</a>
+        <div style="display:flex; gap:10px;">
+            <a href="/retur" class="btn-back">Retur Barang</a>
+            <a href="/kasir/dashboard" class="btn-back">← Kembali ke Dashboard</a>
+        </div>
     </div>
 
     <div class="card">
@@ -177,6 +198,7 @@
                     <td><span class="price-text">Rp {{ number_format($trx->total, 0, ',', '.') }}</span></td>
                     <td style="text-align: right;">
                         <a href="{{ route('transaksi.show', $trx->id) }}" class="btn-detail">Detail Nota →</a>
+                        <a href="{{ route('retur.create', $trx->id) }}" class="btn-retur">Retur</a>
                     </td>
                 </tr>
                 @empty

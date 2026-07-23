@@ -153,13 +153,13 @@
             </form>
 
             {{-- RINGKASAN STATS --}}
-            <div class="grid grid-cols-4 gap-4 mb-6">
+            <div class="grid grid-cols-4 gap-4 mb-4">
                 <div class="bg-[#0f1629]/60 border border-slate-800/60 rounded-2xl p-4">
                     <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wide mb-1">Total Transaksi</p>
                     <p class="text-2xl font-extrabold text-white">{{ $ringkasan->total_trx ?? 0 }}</p>
                 </div>
                 <div class="bg-[#0f1629]/60 border border-slate-800/60 rounded-2xl p-4">
-                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wide mb-1">Total Omset</p>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wide mb-1">Total Omset (Kotor)</p>
                     <p class="text-2xl font-extrabold text-amber-400">Rp {{ number_format($ringkasan->total_omset ?? 0, 0, ',', '.') }}</p>
                 </div>
                 <div class="bg-[#0f1629]/60 border border-slate-800/60 rounded-2xl p-4">
@@ -169,6 +169,30 @@
                 <div class="bg-[#0f1629]/60 border border-slate-800/60 rounded-2xl p-4">
                     <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wide mb-1">Jenis Produk Terjual</p>
                     <p class="text-2xl font-extrabold text-emerald-400">{{ $laporanProduk->count() }}</p>
+                </div>
+            </div>
+
+            {{-- RINGKASAN RETUR / TUKAR BARANG --}}
+            <div class="grid grid-cols-4 gap-4 mb-6">
+                <div class="bg-[#0f1629]/60 border border-emerald-500/30 rounded-2xl p-4">
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wide mb-1">Omset Bersih (Setelah Retur)</p>
+                    <p class="text-2xl font-extrabold text-emerald-400">Rp {{ number_format($omsetBersih, 0, ',', '.') }}</p>
+                </div>
+                <div class="bg-[#0f1629]/60 border border-slate-800/60 rounded-2xl p-4">
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wide mb-1">Total Retur</p>
+                    <p class="text-2xl font-extrabold text-white">{{ $ringkasanRetur->total_retur ?? 0 }}
+                        <span class="text-xs text-slate-500 font-semibold">
+                            ({{ $ringkasanRetur->jumlah_tukar_barang ?? 0 }} tukar &bull; {{ $ringkasanRetur->jumlah_retur_uang ?? 0 }} cash)
+                        </span>
+                    </p>
+                </div>
+                <div class="bg-[#0f1629]/60 border border-rose-500/30 rounded-2xl p-4">
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wide mb-1">Uang Kembali ke Pelanggan</p>
+                    <p class="text-2xl font-extrabold text-rose-400">Rp {{ number_format($ringkasanRetur->total_kas_keluar ?? 0, 0, ',', '.') }}</p>
+                </div>
+                <div class="bg-[#0f1629]/60 border border-blue-500/30 rounded-2xl p-4">
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wide mb-1">Tambahan Bayar (Tukar Barang)</p>
+                    <p class="text-2xl font-extrabold text-blue-400">Rp {{ number_format($ringkasanRetur->total_kas_tambahan ?? 0, 0, ',', '.') }}</p>
                 </div>
             </div>
 
@@ -273,6 +297,117 @@
                 </div>
 
             </div>
+
+            {{-- REKAP BARANG YANG DIRETUR / DITUKAR --}}
+            <div class="mt-6">
+                <h2 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
+                    <i data-lucide="rotate-ccw" class="w-4 h-4 text-rose-400"></i>
+                    Rekap Barang yang Diretur / Ditukar Pelanggan
+                </h2>
+                <div class="bg-[#0f1629]/60 border border-slate-800/60 rounded-2xl overflow-hidden">
+                    <table class="w-full text-xs">
+                        <thead>
+                            <tr class="border-b border-slate-800 bg-[#090f1e]">
+                                <th class="text-left px-4 py-3 text-slate-500 uppercase tracking-wider font-bold">#</th>
+                                <th class="text-left px-4 py-3 text-slate-500 uppercase tracking-wider font-bold">Kode</th>
+                                <th class="text-left px-4 py-3 text-slate-500 uppercase tracking-wider font-bold">Nama Produk</th>
+                                <th class="text-center px-4 py-3 text-slate-500 uppercase tracking-wider font-bold">Qty Diretur</th>
+                                <th class="text-right px-4 py-3 text-slate-500 uppercase tracking-wider font-bold">Total Nilai Retur</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/50">
+                            @forelse($laporanReturProduk as $i => $item)
+                            <tr class="hover:bg-slate-800/20 transition">
+                                <td class="px-4 py-3 text-slate-500">{{ $i + 1 }}</td>
+                                <td class="px-4 py-3">
+                                    <span class="font-mono text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-lg text-[10px] font-bold">
+                                        {{ $item->kode_produk }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-white font-semibold">{{ $item->nama_produk }}</td>
+                                <td class="px-4 py-3 text-center">
+                                    <span class="bg-rose-500/10 border border-rose-500/20 text-rose-400 font-bold px-2.5 py-1 rounded-lg">
+                                        {{ $item->total_qty_retur }} item
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-right font-extrabold text-white">
+                                    Rp {{ number_format($item->total_nilai_retur, 0, ',', '.') }}
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="5" class="px-4 py-10 text-center text-slate-500">
+                                    <i data-lucide="inbox" class="w-8 h-8 mx-auto mb-2 text-slate-700"></i>
+                                    <p>Tidak ada barang yang diretur pada periode ini.</p>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {{-- DAFTAR RINCIAN RETUR --}}
+            <div class="mt-6">
+                <h2 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
+                    <i data-lucide="list" class="w-4 h-4 text-amber-500"></i>
+                    Daftar Retur / Tukar Barang
+                </h2>
+                <div class="bg-[#0f1629]/60 border border-slate-800/60 rounded-2xl overflow-hidden">
+                    <table class="w-full text-xs">
+                        <thead>
+                            <tr class="border-b border-slate-800 bg-[#090f1e]">
+                                <th class="text-left px-4 py-3 text-slate-500 uppercase tracking-wider font-bold">No. Retur</th>
+                                <th class="text-left px-4 py-3 text-slate-500 uppercase tracking-wider font-bold">No. Nota Asal</th>
+                                <th class="text-left px-4 py-3 text-slate-500 uppercase tracking-wider font-bold">Tanggal</th>
+                                <th class="text-left px-4 py-3 text-slate-500 uppercase tracking-wider font-bold">Kasir</th>
+                                <th class="text-left px-4 py-3 text-slate-500 uppercase tracking-wider font-bold">Jenis</th>
+                                <th class="text-left px-4 py-3 text-slate-500 uppercase tracking-wider font-bold">Alasan</th>
+                                <th class="text-right px-4 py-3 text-slate-500 uppercase tracking-wider font-bold">Nilai Retur</th>
+                                <th class="text-right px-4 py-3 text-slate-500 uppercase tracking-wider font-bold">Selisih</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/50">
+                            @forelse($daftarRetur as $r)
+                            <tr class="hover:bg-slate-800/20 transition">
+                                <td class="px-4 py-3">
+                                    <span class="font-mono text-amber-400">{{ $r->no_retur }}</span>
+                                </td>
+                                <td class="px-4 py-3 font-mono text-slate-400">{{ $r->no_nota }}</td>
+                                <td class="px-4 py-3 text-slate-400">{{ \Carbon\Carbon::parse($r->created_at)->format('d/m/Y H:i') }}</td>
+                                <td class="px-4 py-3 text-slate-300">{{ $r->nama_kasir }}</td>
+                                <td class="px-4 py-3">
+                                    @if($r->jenis_retur === 'tukar_barang')
+                                    <span class="px-2 py-1 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-lg font-bold text-[10px]">Tukar Barang</span>
+                                    @else
+                                    <span class="px-2 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-lg font-bold text-[10px]">Uang Cash</span>
+                                    @endif
+                                </td>
+                                <td class="px-4 py-3 text-slate-400">{{ $r->alasan }}</td>
+                                <td class="px-4 py-3 text-right text-white font-bold">Rp {{ number_format($r->total_barang_retur, 0, ',', '.') }}</td>
+                                <td class="px-4 py-3 text-right font-bold {{ $r->selisih < 0 ? 'text-rose-400' : ($r->selisih > 0 ? 'text-blue-400' : 'text-slate-500') }}">
+                                    @if($r->selisih < 0)
+                                        - Rp {{ number_format(abs($r->selisih), 0, ',', '.') }}
+                                        @elseif($r->selisih > 0)
+                                        + Rp {{ number_format($r->selisih, 0, ',', '.') }}
+                                        @else
+                                        Rp 0
+                                        @endif
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="8" class="px-4 py-10 text-center text-slate-500">
+                                    <i data-lucide="inbox" class="w-8 h-8 mx-auto mb-2 text-slate-700"></i>
+                                    <p>Tidak ada retur pada periode ini.</p>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </main>
     </div>
 
